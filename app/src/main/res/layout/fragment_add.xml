@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_back"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="24dp"
+        android:background="@drawable/bg_image_view"
+        android:padding="13dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_save"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="24dp"
+        android:background="@drawable/bg_image_view"
+        android:padding="13dp"
+        android:src="@drawable/ic_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_delete"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="13dp"
+        android:src="@drawable/ic_delete"
+        android:background="@drawable/bg_image_view"
+        app:layout_constraintTop_toTopOf="@id/iv_save"
+        app:layout_constraintBottom_toBottomOf="@id/iv_save"
+        app:layout_constraintEnd_toStartOf="@id/iv_save"
+        android:layout_marginEnd="24dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:fontFamily="@font/nunito_semibold"
+        android:hint="Title"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textSize="32sp"
+        android:background="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_back" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="24dp"
+        android:hint="Type something"
+        android:gravity="top|start"
+        android:textSize="22sp"
+        android:inputType="textMultiLine"
+        android:fontFamily="@font/nunito_regular"
+        android:background="@null"
+        app:layout_constraintTop_toBottomOf="@id/et_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

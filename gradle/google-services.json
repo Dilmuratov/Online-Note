@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "548280047834",
+    "project_id": "online-note-f4c0b",
+    "storage_bucket": "online-note-f4c0b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548280047834:android:6dad6822bdad5aa0b4ade3",
+        "android_client_info": {
+          "package_name": "com.example.onlinenote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "548280047834-u41854naolfsjt0nko9uqldp7k5j9j6h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.onlinenote",
+            "certificate_hash": "30a73635e089428273ca608db27c095ec4591b7f"
+          }
+        },
+        {
+          "client_id": "548280047834-2hbn94qhdcee9034gll31ud6dlju7a2h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPmnrV4L7NcCCIWYywkrV-Ydr4yZ4I7Ko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "548280047834-2hbn94qhdcee9034gll31ud6dlju7a2h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
