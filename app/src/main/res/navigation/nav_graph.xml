@@ -40,7 +40,22 @@
         <argument
             android:name="noteId"
             android:defaultValue="-1"
-            app:argType="integer" />
+            app:argType="string" />
+
+        <argument
+            android:name="title"
+            android:defaultValue=""
+            app:argType="string" />
+
+        <argument
+            android:name="text"
+            android:defaultValue=""
+            app:argType="string" />
+
+        <argument
+            android:name="lastUpdatedDate"
+            android:defaultValue=""
+            app:argType="string" />
     </fragment>
 
 </navigation>

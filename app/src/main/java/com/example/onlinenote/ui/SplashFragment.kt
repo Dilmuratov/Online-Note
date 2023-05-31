@@ -14,7 +14,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSplashBinding.bind(view)
 
-        val timer = object: CountDownTimer(3000, 1000) {
+        val timer = object: CountDownTimer(2000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
 
             }

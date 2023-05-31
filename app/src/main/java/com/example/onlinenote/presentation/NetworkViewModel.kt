@@ -2,31 +2,35 @@ package com.example.onlinenote.presentation
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.onlinenote.data.models.NetworkNote
-import com.example.onlinenote.data.models.Note
 import com.example.onlinenote.domain.NetworkRepository
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.collect
 
-class NetworkViewModel(application: Application): AndroidViewModel(application) {
-    private val repository = NetworkRepository()
+class NetworkViewModel(application: Application) : AndroidViewModel(application) {
 
-    suspend fun getAllNotes(): MutableLiveData<List<NetworkNote>> {
-        return repository.getAllNotes()
+    private val repository = NetworkRepository(FirebaseFirestore.getInstance())
+
+    private val _getAllTodo = MutableLiveData<List<NetworkNote>>()
+    val getAllTodo: LiveData<List<NetworkNote>> get() = _getAllTodo
+
+    suspend fun getAllNotes() {
+        repository.getAllNotes().collect() {
+            _getAllTodo.value = it
+        }
     }
 
-    suspend fun addNote(note: NetworkNote) {
-        repository.addNote(note)
-    }
+    suspend fun addNote(note: NetworkNote) = repository.addNote(note)
 
-    suspend fun searchNote(string: String): MutableLiveData<List<NetworkNote>> {
-        return repository.searchNote(string)
-    }
+    suspend fun deleteNote(note: NetworkNote) = repository.deleteNote(note)
 
-    suspend fun getIdByNote(networkNote: NetworkNote): String {
-        return repository.getIdByNote(networkNote)
-    }
+    suspend fun updateNote(note: NetworkNote) = repository.updateNote(note)
 
-//    suspend fun getNoteById(noteId: String) {
-//        return repository.getNoteById(noteId)
-//    }
+    suspend fun searchNotes(string: String) {
+        repository.searchNotes(string).collect() {
+            _getAllTodo.value = it
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.onlinenote.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -34,18 +35,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         refreshRecyclerView()
 
         searchNote()
-//
-//        toNote()
-    }
 
+        toNote()
+    }
     private fun initVariables() {
         binding.recyclerView.adapter = adapter
     }
 
     private fun initObserves() {
         lifecycleScope.launch {
-            viewModel.getAllNotes().observe(viewLifecycleOwner) { notes ->
-                adapter.submitList(notes)
+            viewModel.getAllTodo.observe(requireActivity()) {
+                adapter.submitList(it)
             }
         }
 
@@ -56,7 +56,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun addNote() {
         binding.btnAdd.setOnClickListener {
-            val bundle = Bundle().apply { putInt("noteId", -1) }
+            val bundle = Bundle().apply { putString("noteId", "-1") }
             findNavController().navigate(R.id.action_mainFragment_to_addFragment, bundle)
         }
     }
@@ -79,27 +79,37 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
             if (binding.expandableLayout.isExpanded) {
                 binding.etSearch.addTextChangedListener {
-                    val string = binding.etSearch.text.toString()
-                    if (string.isNotEmpty()) {
+                    if (it.toString().isNotEmpty()) {
                         lifecycleScope.launch {
-                            viewModel.searchNote(string)
+                            viewModel.searchNotes(it.toString())
                         }
-                    } else lifecycleScope.launch { viewModel.getAllNotes() }
+                    } else {
+                        lifecycleScope.launch {
+                            viewModel.getAllNotes()
+                        }
+                    }
                 }
             }
         }
     }
 
-//    private fun getNoteById() {
-//        adapter.setOnItemClickListener { note ->
-//            Firebase.firestore.collection("notes").document(id)
-//        }
-//    }
-//
-//    private fun toNote() {
-//        adapter.setOnItemClickListener {
-//            val bundle = Bundle().apply { putInt("noteId", it) }
-//            findNavController().navigate(R.id.action_mainFragment_to_addFragment, bundle)
-//        }
-//    }
+    private fun toNote() {
+        adapter.setOnItemClickListener {
+            Log.d(
+                "TTTT",
+                "Id: ${it.id}. Title: ${it.title}. Text: ${it.text}. LastUpdatedDate: ${it.lastUpdatedDate}."
+            )
+
+            val noteId = it.id
+            val title = it.title
+            val text = it.text
+            val lastUpdatedDate = it.lastUpdatedDate
+            val bundle = Bundle()
+            bundle.putString("noteId", noteId)
+            bundle.putString("title", title)
+            bundle.putString("text", text)
+            bundle.putString("lastUpdatedDate", lastUpdatedDate)
+            findNavController().navigate(R.id.action_mainFragment_to_addFragment, bundle)
+        }
+    }
 }

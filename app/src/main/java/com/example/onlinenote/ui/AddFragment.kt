@@ -10,9 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.onlinenote.R
 import com.example.onlinenote.data.models.NetworkNote
-import com.example.onlinenote.data.models.Note
 import com.example.onlinenote.databinding.FragmentAddBinding
-import com.example.onlinenote.presentation.MainViewModel
 import com.example.onlinenote.presentation.NetworkViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -21,20 +19,22 @@ import java.util.*
 class AddFragment : Fragment(R.layout.fragment_add) {
     private lateinit var binding: FragmentAddBinding
     private lateinit var viewModel: NetworkViewModel
-    var noteId: Int = -1
+    private var noteId: String = "-1"
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAddBinding.bind(view)
 
         viewModel = ViewModelProvider(this)[NetworkViewModel::class.java]
 
-//        val bundle = arguments
-//        if (bundle != null && bundle.containsKey("noteId"))
-//        noteId = bundle.getInt("noteId")
-        if (noteId == -1) {
+        val bundle = arguments
+        if (bundle != null && bundle.containsKey("noteId"))
+            noteId = bundle.getString("noteId").toString()
+        if (noteId == "-1") {
             addNote()
         } else {
-//            updateNote()
+            updateNote()
+
+            deleteNote()
         }
 
         backButton()
@@ -49,10 +49,12 @@ class AddFragment : Fragment(R.layout.fragment_add) {
             if (title.isNotEmpty() && text.isNotEmpty()) {
                 val sdf = SimpleDateFormat("dd.MM.yyyy")
                 val currentDate = sdf.format(Date())
-                val note = NetworkNote(title, text, currentDate)
+                val note =
+                    NetworkNote(id = "", title = title, text = text, lastUpdatedDate = currentDate)
+
                 lifecycleScope.launch {
                     viewModel.addNote(note)
-                    Toast.makeText(requireContext(), "Successfully saved!", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_SHORT)
                         .show()
                     findNavController().navigate(AddFragmentDirections.actionAddFragmentToMainFragment())
                 }
@@ -68,53 +70,64 @@ class AddFragment : Fragment(R.layout.fragment_add) {
         }
     }
 
-//    @SuppressLint("SimpleDateFormat")
-//    private fun updateNote() {
-//
-//        viewModel.getAllNotesLiveData.observe(requireActivity()) {
-//
-//            if (it.isNotEmpty()) {
-//                val note = it.first()
-//                binding.etTitle.setText(note.title)
-//                binding.etText.setText(note.text)
-//
-//                binding.ivSave.setOnClickListener {
-//                    val title = binding.etTitle.text.toString()
-//                    val text = binding.etText.text.toString()
-//                    if (title.isNotEmpty() && text.isNotEmpty()) {
-//                        val sdf = SimpleDateFormat("dd.MM.yyyy")
-//                        val currentDate = sdf.format(Date())
-//                        note.title = title
-//                        note.text = text
-//                        note.lastUpdatedData = currentDate.toString()
-//                        lifecycleScope.launch {
-//                            viewModel.updateNote(note)
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "Successfully updated!",
-//                                Toast.LENGTH_SHORT
-//                            )
-//                                .show()
-//                            findNavController().navigate(AddFragmentDirections.actionAddFragmentToMainFragment())
-//                        }
-//                    } else {
-//                        Toast.makeText(requireContext(), "Fill in empty fields", Toast.LENGTH_SHORT)
-//                            .show()
-//                    }
-//                }
-//
-//                binding.ivDelete.setOnClickListener {
-//                    lifecycleScope.launch {
-//                        viewModel.deleteNote(note)
-//                        Toast.makeText(requireContext(), "Deleted", Toast.LENGTH_SHORT).show()
-//                        findNavController().navigate(AddFragmentDirections.actionAddFragmentToMainFragment())
-//                    }
-//                }
-//            }
-//        }
-//
-//        lifecycleScope.launch {
-//            noteId.let { viewModel.getNoteById(it) }
-//        }
-//    }
+    @SuppressLint("SimpleDateFormat")
+    private fun updateNote() {
+        val bundle = arguments
+        if (bundle != null) {
+            val noteId = bundle.getString("noteId")
+            val title = bundle.getString("title")
+            val text = bundle.getString("text")
+            val lastUpdatedDate = bundle.getString("lastUpdatedDate")
+            binding.apply {
+                etTitle.setText(title)
+                etText.setText(text)
+            }
+
+            binding.ivSave.setOnClickListener {
+                if (binding.etText.text.toString().isNotEmpty() && binding.etTitle.text.toString()
+                        .isNotEmpty()
+                ) {
+                    val _title = binding.etTitle.text.toString()
+                    val _text = binding.etText.text.toString()
+                    val _lastUpdatedDate = SimpleDateFormat("dd.MM.yyyy").format(Date())
+                    val note = NetworkNote(
+                        id = noteId,
+                        title = _title,
+                        text = _text,
+                        lastUpdatedDate = _lastUpdatedDate
+                    )
+                    lifecycleScope.launch {
+                        viewModel.updateNote(note)
+                    }
+                    Toast.makeText(requireContext(), "Successfully saved!", Toast.LENGTH_SHORT)
+                        .show()
+                    findNavController().navigate(AddFragmentDirections.actionAddFragmentToMainFragment())
+                } else {
+                    Toast.makeText(requireContext(), "Fill in empty fields", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+    }
+
+    private fun deleteNote() {
+        val bundle = arguments
+        if (bundle != null) {
+            val title = bundle.getString("title", "null").toString()
+            val text = bundle.getString("text", "null").toString()
+            val lastUpdatedDate = bundle.getString("lastUpdatedDate", "null").toString()
+            binding.apply {
+                etTitle.setText(title)
+                etText.setText(text)
+            }
+
+            binding.ivDelete.setOnClickListener {
+                val note = NetworkNote(id = noteId, title, text, lastUpdatedDate)
+                lifecycleScope.launch {
+                    viewModel.deleteNote(note)
+                }
+                findNavController().navigate(R.id.action_addFragment_to_mainFragment)
+            }
+        }
+    }
 }

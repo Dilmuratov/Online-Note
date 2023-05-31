@@ -25,7 +25,6 @@ class NoteAdapter : ListAdapter<NetworkNote, NoteAdapter.ViewHolder>(myDiffUtil)
     }
 
     private var onItemClickListener: ((NetworkNote) -> Unit)? = null
-
     fun setOnItemClickListener(block: (NetworkNote) -> Unit) {
         onItemClickListener = block
     }
@@ -54,9 +53,9 @@ class NoteAdapter : ListAdapter<NetworkNote, NoteAdapter.ViewHolder>(myDiffUtil)
     }
 
     fun setText(note: NetworkNote): String {
-        val text = note.text
+        val text = note.text.toString()
 
-        return if (text.length < 10) {
+        return if (text.length< 10) {
             text
         } else {
             var _text = ""
