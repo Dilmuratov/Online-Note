@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.onlinenote.R
@@ -13,18 +12,19 @@ import com.example.onlinenote.data.models.NetworkNote
 import com.example.onlinenote.databinding.FragmentAddBinding
 import com.example.onlinenote.presentation.NetworkViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddFragment : Fragment(R.layout.fragment_add) {
     private lateinit var binding: FragmentAddBinding
-    private lateinit var viewModel: NetworkViewModel
+    private val viewModel: NetworkViewModel by viewModel()
     private var noteId: String = "-1"
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAddBinding.bind(view)
 
-        viewModel = ViewModelProvider(this)[NetworkViewModel::class.java]
+//        viewModel = ViewModelProvider(this)[NetworkViewModelImpl::class.java]
 
         val bundle = arguments
         if (bundle != null && bundle.containsKey("noteId"))

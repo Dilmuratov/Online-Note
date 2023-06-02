@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -14,17 +13,20 @@ import com.example.onlinenote.databinding.FragmentMainBinding
 import com.example.onlinenote.presentation.NetworkViewModel
 import com.example.onlinenote.ui.adapter.NoteAdapter
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var binding: FragmentMainBinding
-    private lateinit var viewModel: NetworkViewModel
+    private val viewModel: NetworkViewModel by viewModel()
+
+    //    private lateinit var viewModel: NetworkViewModel
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private val adapter = NoteAdapter()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainBinding.bind(view)
 
-        viewModel = ViewModelProvider(this)[NetworkViewModel::class.java]
+//        viewModel = ViewModelProvider(this)[NetworkViewModelImpl::class.java]
 
         initVariables()
 
@@ -38,6 +40,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         toNote()
     }
+
     private fun initVariables() {
         binding.recyclerView.adapter = adapter
     }
