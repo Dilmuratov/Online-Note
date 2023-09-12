@@ -19,23 +19,23 @@ val dataModule = module {
         NetworkRepositoryImpl(get())
     }
 
-    single<GetAllNotesUseCase> {
+    factory<GetAllNotesUseCase> {
         GetAllNotesUseCaseImpl(get())
     }
 
-    single<AddNoteUseCase> {
+    factory<AddNoteUseCase> {
         AddNoteUseCaseImpl(get())
     }
 
-    single<DeleteNoteUseCase> {
+    factory<DeleteNoteUseCase> {
         DeleteNoteUseCaseImpl(get())
     }
 
-    single<UpdateNoteUseCase> {
+    factory<UpdateNoteUseCase> {
         UpdateNoteUseCaseImpl(get())
     }
 
-    single<SearchNotesUseCase> {
+    factory<SearchNotesUseCase> {
         SearchNotesUseCaseImpl(get())
     }
 }

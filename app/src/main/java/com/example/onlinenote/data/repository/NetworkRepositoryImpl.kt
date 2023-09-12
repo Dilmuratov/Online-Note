@@ -1,7 +1,5 @@
 package com.example.onlinenote.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.onlinenote.data.models.NetworkNote
 import com.example.onlinenote.domain.NetworkRepository
 import com.google.firebase.firestore.FirebaseFirestore
@@ -9,13 +7,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
-class NetworkRepositoryImpl(private val db: FirebaseFirestore) : NetworkRepository {
+class NetworkRepositoryImpl(db: FirebaseFirestore) : NetworkRepository {
 
     private val notesCollectionRef = db.collection("notes")
-    private val _getAllTodo = MutableLiveData<NetworkNote>()
-    val getAllTodo: LiveData<NetworkNote> get() = _getAllTodo
 
-    override suspend fun getAllNotes() = flow<List<NetworkNote>> {
+    override suspend fun getAllNotes() = flow {
         emit(notesCollectionRef.get().await().documents.mapNotNull {
             NetworkNote(
                 it.id,
@@ -46,8 +42,8 @@ class NetworkRepositoryImpl(private val db: FirebaseFirestore) : NetworkReposito
         )
     }
 
-    override suspend fun searchNotes(string: String) = flow<List<NetworkNote>> {
-        emit(notesCollectionRef.whereArrayContains("title", string)
+    override suspend fun searchNotes(string: String) = flow {
+        emit(notesCollectionRef.whereEqualTo("title", string)
             .get().await()
             .mapNotNull {
                 NetworkNote(
